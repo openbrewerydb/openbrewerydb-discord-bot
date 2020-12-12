@@ -1,11 +1,16 @@
 require("dotenv").config();
 const axios = require("axios");
+const GphApiClient = require("giphy-js-sdk-core");
 const { Client, MessageEmbed } = require("discord.js");
 const client = new Client();
 const { prefix } = require("./config.json");
 
 const REPLY_MESSAGES = ["hi there! 🍻", "how's it going? 🍻", "cheers! 🍻"];
 
+// GIPHY API Client
+const gf = GphApiClient(process.env.GIPHY_TOKEN);
+
+// Discord Login
 client.login(process.env.DISCORD_TOKEN);
 
 client.on("ready", readyDiscord);
@@ -15,7 +20,7 @@ function readyDiscord() {
   console.log("🍻");
 }
 
-function receivedMessage(message) {
+async function receivedMessage(message) {
   // Ignore messages from bots & broadcast messages
   if (
     message.author.bot ||
@@ -104,6 +109,31 @@ function receivedMessage(message) {
           })
           .catch((err) => {
             // Fail silently and log
+            console.log(err);
+          });
+      }
+    } else if (command === "gif") {
+      if (!args.length) {
+        console.log(`🔍 Searching GIPHY for random GIF`);
+        gf.random("gifs", { tag: "beer" })
+          .then((response) => {
+            // console.log(response);
+            return message.channel.send(response.data.url);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        let query = args.join(" ");
+        console.log(`🔍 Searching GIPHY for '${query}'...`);
+        gf.search("gifs", { q: query, limit: 1 })
+          .then((response) => {
+            response.data.forEach((gif) => {
+              // console.log(gif);
+              return message.channel.send(gif.url);
+            });
+          })
+          .catch((err) => {
             console.log(err);
           });
       }
