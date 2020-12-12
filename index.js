@@ -15,6 +15,7 @@ client.login(process.env.DISCORD_TOKEN);
 
 client.on("ready", readyDiscord);
 client.on("message", receivedMessage);
+client.on("guildMemberAdd", greetNewMember);
 
 function readyDiscord() {
   console.log("🍻");
@@ -54,7 +55,7 @@ async function receivedMessage(message) {
       if (!args.length) {
         // Ensure there's a search argument
         return message.channel.send(
-          `Sorry, I need to search for something. Try something like, '!info modern times'`
+          `Which brewery would you like info on? Try something like, '!info modern times'`
         );
       } else {
         brewery_name = args.join(" ");
@@ -139,6 +140,21 @@ async function receivedMessage(message) {
       }
     }
   }
+}
+
+function greetNewMember(member) {
+  // Send the message to a designated channel on a server:
+  const channel = member.guild.channels.cache.find(
+    (ch) => ch.name === "introduce-yourself"
+  );
+  // Do nothing if the channel wasn't found on this server
+  if (!channel) {
+    console.log(`Can't find channel #introduce-yourself`);
+    return;
+  }
+
+  // Send the message, mentioning the member
+  channel.send(`Hello and welcome to the server, ${member}! 🍻`);
 }
 
 function embedBreweryFields(message, breweries) {
