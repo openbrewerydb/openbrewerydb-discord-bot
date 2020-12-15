@@ -1,3 +1,6 @@
 {
-  "prefix": "!"
+  "prefix": "!",
+  "channelIds": {
+    "introduce-yourself": "740409313142767686"
+  }
 }
