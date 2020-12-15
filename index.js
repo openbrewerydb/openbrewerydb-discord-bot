@@ -143,6 +143,8 @@ async function receivedMessage(message) {
 }
 
 function greetNewMember(member) {
+  console.log(`Welcoming ${member.displayName}! 🍻`);
+
   // Send the message to a designated channel on a server:
   const channel = member.guild.channels.cache.find(
     (ch) => ch.name === "introduce-yourself"
