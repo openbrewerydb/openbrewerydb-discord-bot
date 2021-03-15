@@ -22,10 +22,11 @@ Use your Discord login to access the Developers Portal (or sign up).
 
 ### 3. Add Bot to OBDB Discord
 
-In order for the bot to appear in the OBDB Discord Server, an Admin (chrisjm) will need to authorize and add it.
+In order for the bot to appear in the OBDB Discord Server, an Admin will need to authorize and add it.
 
 1. Go to **General Information** and copy **Client ID**.
-2. Private message your Client ID (Application ID) to chrisjm on the OBDB Discord.
+2. Private message your Client ID (Application ID) to an Admin (i.e., chrisjm) on the [OBDB Discord](https://discord.gg/3G3syaD).
+  a. Admin will add the bot via the following: `https://discord.com/oauth2/authorize?client_id={client_id}&scope=bot`
 
 ### 4. Run Bot
 
