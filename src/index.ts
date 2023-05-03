@@ -24,7 +24,6 @@ client.login(process.env.DISCORD_TOKEN);
 
 client.on("ready", readyDiscord);
 client.on("message", receivedMessage);
-client.on("guildMemberAdd", greetNewMember);
 
 function readyDiscord() {
   console.log("🍻");
@@ -171,28 +170,6 @@ async function getCompletionFromMessages(
   });
 
   return response.data.choices[0].message?.content;
-}
-
-function greetNewMember(member: GuildMember) {
-  console.log(`Welcoming ${member.displayName}! 🍻`);
-
-  // Send the message to a designated channel on a server:
-  const guild = member.guild;
-  const channel = guild.channels.cache.find(
-    (ch) => ch.name.toLowerCase() === "introduce-yourself"
-  );
-
-  // Do nothing if the channel wasn't found on this server
-  if (!channel) {
-    console.log(`Can't find channel #introduce-yourself`);
-    return;
-  }
-
-  // Send the message, mentioning the member
-  // @ts-ignore This is of type TextChannel but cache only returns GuildChannel
-  channel.send(
-    `Hello and welcome to the server, ${member}! 🍻 How did you hear about OBDB?`
-  );
 }
 
 function embedBreweryFields(message: Message, breweries: Brewery[]) {
