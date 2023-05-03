@@ -30,62 +30,6 @@ function readyDiscord() {
   console.log("🍻");
 }
 
-async function getCompletionFromMessages(
-  messages: {
-    role: ChatCompletionRequestMessageRoleEnum;
-    content: string;
-  }[],
-  temperature = 0,
-  model = "gpt-3.5-turbo"
-) {
-  const response = await openai.createChatCompletion({
-    model,
-    messages,
-    temperature,
-  });
-
-  return response.data.choices[0].message?.content;
-}
-
-function greetNewMember(member: GuildMember) {
-  console.log(`Welcoming ${member.displayName}! 🍻`);
-
-  // Send the message to a designated channel on a server:
-  const guild = member.guild;
-  const channel = guild.channels.cache.find(
-    (ch) => ch.name.toLowerCase() === "introduce-yourself"
-  );
-
-  // Do nothing if the channel wasn't found on this server
-  if (!channel) {
-    console.log(`Can't find channel #introduce-yourself`);
-    return;
-  }
-
-  // Send the message, mentioning the member
-  // @ts-ignore This is of type TextChannel but cache only returns GuildChannel
-  channel.send(
-    `Hello and welcome to the server, ${member}! 🍻 How did you hear about OBDB?`
-  );
-}
-
-function embedBreweryFields(message: Message, breweries: Brewery[]) {
-  let fields = [];
-
-  for (let i = 0; i < breweries.length; i++) {
-    const b = breweries[i];
-    const field = {
-      name: b.name,
-      value: `${b.city}, ${b.state}`,
-    };
-    fields.push(field);
-  }
-
-  const breweryEmbed = new MessageEmbed().setColor("#FBBF24").addFields(fields);
-
-  message.reply(breweryEmbed);
-}
-
 async function receivedMessage(message: Message) {
   // Ignore messages from bots & broadcast messages
   if (
@@ -210,4 +154,60 @@ async function receivedMessage(message: Message) {
       }
     }
   }
+}
+
+async function getCompletionFromMessages(
+  messages: {
+    role: ChatCompletionRequestMessageRoleEnum;
+    content: string;
+  }[],
+  temperature = 0,
+  model = "gpt-3.5-turbo"
+) {
+  const response = await openai.createChatCompletion({
+    model,
+    messages,
+    temperature,
+  });
+
+  return response.data.choices[0].message?.content;
+}
+
+function greetNewMember(member: GuildMember) {
+  console.log(`Welcoming ${member.displayName}! 🍻`);
+
+  // Send the message to a designated channel on a server:
+  const guild = member.guild;
+  const channel = guild.channels.cache.find(
+    (ch) => ch.name.toLowerCase() === "introduce-yourself"
+  );
+
+  // Do nothing if the channel wasn't found on this server
+  if (!channel) {
+    console.log(`Can't find channel #introduce-yourself`);
+    return;
+  }
+
+  // Send the message, mentioning the member
+  // @ts-ignore This is of type TextChannel but cache only returns GuildChannel
+  channel.send(
+    `Hello and welcome to the server, ${member}! 🍻 How did you hear about OBDB?`
+  );
+}
+
+function embedBreweryFields(message: Message, breweries: Brewery[]) {
+  let fields = [];
+
+  for (let i = 0; i < breweries.length; i++) {
+    const b = breweries[i];
+    const field = {
+      name: b.name,
+      value: `${b.city}, ${b.state}`,
+    };
+    fields.push(field);
+  }
+
+  const breweryEmbed = new MessageEmbed().setColor("#FBBF24").addFields(fields);
+
+  message.reply(breweryEmbed);
 }
